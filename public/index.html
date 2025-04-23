@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grocery Price Comparison (POC)</title>
+</head>
+<body>
+  <h1>Grocery Price Comparison (POC)</h1>
+  <form id="grocery-form">
+    <label for="grocery-list">Enter your grocery list (comma separated):</label><br>
+    <input type="text" id="grocery-list" name="grocery-list" style="width:300px"><br><br>
+    <button type="submit">Find Prices</button>
+  </form>
+  <div id="results"></div>
+
+  <script>
+    document.getElementById('grocery-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const groceryList = document.getElementById('grocery-list').value;
+      const res = await fetch('/api/groceries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ groceryList })
+      });
+      const data = await res.json();
+      let html = '<h2>Results</h2>';
+      if (data.answer) {
+        html += `<div style='white-space:pre-line;'>${data.answer}</div>`;
+      } else {
+        html += '<p>No answer received from Gemini.</p>';
+      }
+      if (data.groundingMetadata && data.groundingMetadata.groundingChunks) {
+        html += '<h3>Sources</h3><ul>';
+        data.groundingMetadata.groundingChunks.forEach(chunk => {
+          if (chunk.web && chunk.web.uri && chunk.web.title) {
+            html += `<li><a href="${chunk.web.uri}" target="_blank">${chunk.web.title}</a></li>`;
+          }
+        });
+        html += '</ul>';
+      }
+      document.getElementById('results').innerHTML = html;
+    });
+  </script>
+</body>
+</html>

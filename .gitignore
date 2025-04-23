@@ -4,6 +4,8 @@
 *.userosscache
 *.sln.docstates
 .clinerules
+/docs
+IMPLEMENTATION_PLAN.md
 
 # Build results
 [Dd]ebug/
