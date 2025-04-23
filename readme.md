@@ -54,4 +54,4 @@ This will start the app and expose it at [http://localhost:3000](http://localhos
 This is a quick-and-dirty POC. Contributions are welcome for improvements, but for production, add proper security, validation, and error handling!
 
 ## License
-MIT (or specify your own)
+MIT
